@@ -1,0 +1,15 @@
+{
+  "name": "secure-token-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "fernet": "^0.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
