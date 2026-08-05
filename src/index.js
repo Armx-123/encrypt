@@ -59,11 +59,13 @@ export default {
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
 
-    } catch (error) {
-      return new Response(JSON.stringify({ error: "Invalid, expired, or tampered token." }), { 
+        } catch (error) {
+      // TEMPORARY DEBUGGING FIX: Expose the exact cryptographic error
+      return new Response(JSON.stringify({ error: error.message }), { 
         status: 400, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
+
   }
 };
