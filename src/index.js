@@ -45,7 +45,7 @@ export default {
       const receivedToken = new fernet.Token({
           secret: secret,
           token: token,
-          ttl: 300 // 5 minutes expiration
+          ttl: 3000 // 5 minutes expiration
       });
 
       const decryptedString = receivedToken.decode();
