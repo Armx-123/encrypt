@@ -1,7 +1,7 @@
 // src/index.js
 // Notice we REMOVED the import fernet line from the top of the file.
 
-const ALLOWED_ORIGIN = "https://your-custom-site.com"; 
+const ALLOWED_ORIGIN = "https://jasmine-verify.vercel.app"; 
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
