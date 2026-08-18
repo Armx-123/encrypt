@@ -7,7 +7,8 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "fernet": "^0.4.0"
+    "fernet": "^0.4.0",
+    "@libsql/client": "^0.14.0"
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
