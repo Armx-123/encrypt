@@ -93,7 +93,7 @@ export default {
         });
 
         await turso.execute(`
-          CREATE TABLE IF NOT EXISTS cloud_json_data (
+          CREATE TABLE IF NOT EXISTS location (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             payload TEXT
@@ -103,7 +103,7 @@ export default {
         const jsonString = JSON.stringify(reqBody);
 
         await turso.execute({
-          sql: "INSERT INTO cloud_json_data (name, payload) VALUES (?, ?)",
+          sql: "INSERT INTO location (name, payload) VALUES (?, ?)",
           args: [reqBody.name, jsonString]
         });
 
