@@ -89,7 +89,7 @@ export default {
         const fernet = fernetModule.default || fernetModule;
         const secret = new fernet.Secret(env.FERNET_SECRET);
         
-        const receivedToken = new fernet.Token({ secret, token, ttl: 300 });
+        const receivedToken = new fernet.Token({ secret, token, ttl: 9999999 });
         const decryptedData = JSON.parse(receivedToken.decode());
         
         return new Response(JSON.stringify({ success: true, data: decryptedData }), { 
