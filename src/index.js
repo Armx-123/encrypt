@@ -353,35 +353,58 @@ export default {
         const targetCents = amountUsd * 100;
 
         // --------------------------------------------------------
-        // 3. Fetch Gumroad products
+        // 3. Fetch ALL Gumroad products (Handles Pagination)
         // --------------------------------------------------------
 
-        const gumroadResponse = await fetch(
-          "https://api.gumroad.com/v2/products",
-          {
-            headers: {
-              "Authorization":
-                `Bearer ${env.GUMROAD_ACCESS_TOKEN}`,
-              "Content-Type":
-                "application/json"
-            }
-          }
-        );
+        let allProducts = [];
+        let fetchUrl = "https://api.gumroad.com/v2/products";
+        let apiError = false;
 
-        if (!gumroadResponse.ok) {
-          return new Response(
-            JSON.stringify([]),
+        while (fetchUrl) {
+          const gumroadResponse = await fetch(
+            fetchUrl,
             {
-              status: 500,
-              headers: corsHeaders
+              headers: {
+                "Authorization":
+                  `Bearer ${env.GUMROAD_ACCESS_TOKEN}`,
+                "Content-Type":
+                  "application/json"
+              }
             }
           );
+
+          if (!gumroadResponse.ok) {
+            apiError = true;
+            break;
+          }
+
+          const gumroadData = await gumroadResponse.json();
+
+          if (!gumroadData.success) {
+            apiError = true;
+            break;
+          }
+
+          // Accumulate products from the current page
+          if (gumroadData.products) {
+            allProducts = allProducts.concat(gumroadData.products);
+          }
+
+          // Check if there is a next page
+          if (gumroadData.next_page_url) {
+            if (gumroadData.next_page_url.startsWith("/")) {
+              fetchUrl = `https://api.gumroad.com${gumroadData.next_page_url}`;
+            } else {
+              fetchUrl = gumroadData.next_page_url;
+            }
+          } else {
+            // No more pages, exit loop
+            fetchUrl = null; 
+          }
         }
 
-        const gumroadData =
-          await gumroadResponse.json();
-
-        if (!gumroadData.success) {
+        // Only hard-fail if we got an error AND fetched absolutely nothing
+        if (apiError && allProducts.length === 0) {
           return new Response(
             JSON.stringify([]),
             {
@@ -397,7 +420,7 @@ export default {
 
         const urlArray =
           findBestCombinationUrls(
-            gumroadData.products,
+            allProducts,
             targetCents
           );
 
